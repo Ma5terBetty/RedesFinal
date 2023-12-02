@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ChatManager : MonoBehaviour, IChatClientListener
+public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
 {
     #region PROPERTIES
     public TextMeshProUGUI content;

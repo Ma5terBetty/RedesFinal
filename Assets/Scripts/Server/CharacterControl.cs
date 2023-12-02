@@ -2,7 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class CharacterControl : MonoBehaviour
+public class CharacterControl : MonoBehaviourPunCallbacks
 {
     [SerializeField] private ServerManager _server;
     private Player _localClient;
@@ -54,4 +54,9 @@ public class CharacterControl : MonoBehaviour
         _server.RPC("RequestMove", _localClient, direction);
     }
 
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel("MainMenu");
+    }
 }
