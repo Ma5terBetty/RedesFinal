@@ -35,7 +35,7 @@ public class NetManager : MonoBehaviourPunCallbacks
         RoomOptions options = new RoomOptions();
         options.IsOpen = true;
         options.IsVisible = true;
-        options.MaxPlayers = 4;
+        options.MaxPlayers = 5;
 
         PhotonNetwork.JoinOrCreateRoom(roomName.text, options, TypedLobby.Default);
         playButton.interactable = false;
