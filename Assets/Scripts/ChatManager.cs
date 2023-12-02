@@ -5,6 +5,8 @@ using Photon.Pun;
 using ExitGames.Client.Photon;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ChatManager : MonoBehaviour, IChatClientListener
 {
@@ -30,6 +32,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         _chatDic[PhotonNetwork.CurrentRoom.Name] = 1;
         _chatClient = new ChatClient(this);
         _chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new Photon.Chat.AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
+        inputField.Select();
     }
 
     void Update()
@@ -42,12 +45,15 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     void UpdateChatUI()
     {
         content.text = _chats[_currentChat];
+        print("Chat Update");
+        inputField.ActivateInputField();
     }
 
     public void SendMessageToChat()
     {
         if (string.IsNullOrEmpty(inputField.text) || string.IsNullOrWhiteSpace(inputField.text)) return;
         _chatClient.PublishMessage(_channels[_currentChat], inputField.text);
+        inputField.text = "";
     }
     #endregion
 
@@ -64,12 +70,11 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     public void OnConnected()
     {
         _chatClient.Subscribe(_channels);
-        print("Hola chat");
+        print("Client Connected to Photon");
     }
 
     public void OnDisconnected()
     {
-        print("Chau chat");
     }
 
     public void OnGetMessages(string channelName, string[] senders, object[] messages)
@@ -80,6 +85,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
             _chats[indexChat] += senders[i] + ":" + messages[i] + "\n";
         }
         UpdateChatUI();
+        print("Get Message");
     }
 
     public void OnPrivateMessage(string sender, object message, string channelName)
@@ -98,6 +104,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
             _chats[0] += "<color=blue>" + "Suscribed to channel: " + channels[i] + "</color>" + "\n";
         }
         UpdateChatUI();
+        print("Suscribed to Channel");
     }
 
     public void OnUnsubscribed(string[] channels)
@@ -107,7 +114,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     public void OnUserSubscribed(string channel, string user)
     {
-
+        print("User Suscribed");
     }
 
     public void OnUserUnsubscribed(string channel, string user)
