@@ -22,4 +22,13 @@ public class MagicBall : MonoBehaviourPun
 
         transform.position += transform.forward * Time.deltaTime * _speed;
     }
+
+    [PunRPC]
+    private void SetOwner(Player client)
+    {
+        if (PhotonNetwork.LocalPlayer == client)
+        {
+            _owner = client;
+        }
+    }
 }
