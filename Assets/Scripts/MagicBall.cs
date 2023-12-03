@@ -12,12 +12,14 @@ public class MagicBall : MonoBehaviourPun
     public float lifeSpawn = 5f;
     public float counter = 0;
 
+    public string duenio;
+
     void Update()
     {
         counter += Time.deltaTime;
         if (counter >= lifeSpawn)
         {
-            PhotonNetwork.Destroy(this.gameObject);
+            _server.RPC("DestroyBall", _owner, this.gameObject);
         }
 
         transform.position += transform.forward * Time.deltaTime * _speed;
@@ -29,6 +31,7 @@ public class MagicBall : MonoBehaviourPun
         if (PhotonNetwork.LocalPlayer == client)
         {
             _owner = client;
+            duenio = _owner.NickName;
         }
     }
 }
