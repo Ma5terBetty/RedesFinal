@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using System.Collections.Generic;
 
 public class Character : MonoBehaviourPun
 {
@@ -13,9 +14,11 @@ public class Character : MonoBehaviourPun
 
     public ServerManager ServerManager;
     public Player LocalPlayer;
+    public string PlayerRepresentation;
 
     private void Start()
     {
+        LocalPlayer = PhotonNetwork.LocalPlayer;
         _health = 100;
     }
     private void Awake()
@@ -23,15 +26,28 @@ public class Character : MonoBehaviourPun
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    public void Move(Vector3 direction)
+
+    [PunRPC]
+    public void Move(string name, Vector3 position)
     {
-        direction *= _speed;
-        _rigidbody.position += direction;
+        if (PlayerRepresentation == name)
+        {
+            _rigidbody.position = position;
+        }
     }
 
-    public void Rotate(float rotation)
+    public void NewPosition(Vector3 position)
     {
-        transform.Rotate(0, rotation * _turningSpeed * Time.deltaTime, 0);
+        _rigidbody.position = position;
+    }
+
+    [PunRPC]
+    public void Rotate(string name, Vector3 rotation)
+    {
+        if (PlayerRepresentation == name)
+        {
+            transform.eulerAngles = rotation;
+        }
     }
 
     public void GetDamage()
@@ -49,6 +65,7 @@ public class Character : MonoBehaviourPun
     public void UpdateName(string name)
     {
         _playerName.text = name;
+        PlayerRepresentation = name;
     }
 
     private void OnCollisionEnter(Collision collision)
