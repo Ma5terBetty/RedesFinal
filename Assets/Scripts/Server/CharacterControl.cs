@@ -25,16 +25,7 @@ public class CharacterControl : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        _server.photonView.RPC("RequestConnect", _server.GetServer, PhotonNetwork.LocalPlayer); //??
-    }
-
-    // Testing
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Damage();
-        }
+        _server.photonView.RPC("RequestConnect", _server.GetServer, PhotonNetwork.LocalPlayer);
     }
     #endregion
 
@@ -44,7 +35,9 @@ public class CharacterControl : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("MainMenu");
     }
+    #endregion
 
+    #region ACTIONS
     public void Attack()
     {
         _server.RPC("RequestAttack", _localClient);
