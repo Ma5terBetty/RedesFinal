@@ -13,15 +13,24 @@ public class MicManager : MonoBehaviour
     {
         List<string> list = new List<string>();
         string[] devices = Microphone.devices;
-        for (int i = 0; i < devices.Length; i++)
+
+        if (devices.Length != 0)
         {
-            list.Add(devices[i]);
+            for (int i = 0; i < devices.Length; i++)
+            {
+                list.Add(devices[i]);
+            }
+            dropDown.AddOptions(list);
+            SetMicrophoneDevice(0);
         }
-        dropDown.AddOptions(list);
     }
 
     public void SetMicrophoneDevice(int i)
     {
-        recorder.UnityMicrophoneDevice = Microphone.devices[i];
+        string[] devices = Microphone.devices;
+        if (Microphone.devices.Length > i)
+        {
+            recorder.UnityMicrophoneDevice = devices[i];
+        }
     }
 }
