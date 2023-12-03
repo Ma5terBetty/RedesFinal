@@ -4,9 +4,13 @@ using Photon.Realtime;
 
 public class CharacterControl : MonoBehaviourPunCallbacks
 {
+    #region PROPERTIES
+
     [SerializeField] private ServerManager _server;
     private Player _localClient;
+    #endregion
 
+    #region UNITY_FUNCTIONS
     private void Awake()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -24,6 +28,17 @@ public class CharacterControl : MonoBehaviourPunCallbacks
         _server.photonView.RPC("RequestConnect", _server.GetServer, PhotonNetwork.LocalPlayer); //??
     }
 
+    // Testing
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Damage();
+        }
+    }
+    #endregion
+
+    #region PHOTON_RELATED
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         PhotonNetwork.LeaveRoom();
@@ -74,4 +89,5 @@ public class CharacterControl : MonoBehaviourPunCallbacks
     {
         _server.RPC("RequestDamage", _localClient);
     }
+    #endregion
 }
