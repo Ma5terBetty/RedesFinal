@@ -11,9 +11,11 @@ public class ServerManager : MonoBehaviourPunCallbacks
     [SerializeField] private Transform[] _spawnPoints;
     private Dictionary<Player, Character> _playersDic = new Dictionary<Player, Character>();
     private Dictionary<Character, Player> _charactersDic = new Dictionary<Character, Player>();
+    private Dictionary<string, Vector3> _posDic = new Dictionary<string, Vector3>();
     private Player _server;
     private int _playerCount;
     private bool _isGameStarted;
+    private bool _isGameEnded;
     #endregion
 
     #region PUBLIC_PROPERTIES
@@ -53,6 +55,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
         {
             _playersDic[client] = character;
             _charactersDic[character] = client;
+            _playerCount++;
         }
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -62,27 +65,53 @@ public class ServerManager : MonoBehaviourPunCallbacks
             if (_playersDic.ContainsKey(otherPlayer))
             {
                 PhotonNetwork.Destroy(_playersDic[otherPlayer].gameObject);
+                _playerCount--;
             }
         }
     }
     #endregion
 
     #region REQUESTS
-    [PunRPC] // Hago un pedido de conexión
+
+    /// <summary>
+    /// Pedido para instanciar el jugador y guardar su referencia.
+    /// </summary>
+    /// <param name="player">Cliente a instanciar</param>
+    [PunRPC]
     private void RequestConnect(Player player)
     {
         CreatePlayer(player);
+        print($"{player.NickName}");
     }
+
+    /// <summary>
+    /// Pedido de movimiento dentro del mundo
+    /// </summary>
+    /// <param name="client">Cliente a mover</param>
+    /// <param name="movement">Dirección de movimiento</param>
     [PunRPC] // Pedido de Movimiento
-    private void RequestMove(Player client, Vector3 dir)
+    private void RequestMove(Player client, Vector3 movement)
     {
-        _playersDic[client].Move(dir);
+        _playersDic[client].transform.position += movement;
+        UpdatePlayersPositions();
     }
+
+    /// <summary>
+    /// Pedido de rotación del personaje
+    /// </summary>
+    /// <param name="client">Cliente a rotar</param>
+    /// <param name="degrees">Cantidad de grados a rotar</param>
     [PunRPC] // Pedido de Rotación
     private void RequestRotation(Player client, float degrees)
     {
-        _playersDic[client].Rotate(degrees);
+        _playersDic[client].transform.Rotate(Vector3.up, degrees);
+        UpdatePlayersRotation();
     }
+
+    /// <summary>
+    /// Pedido de ataque para instanciar una bola
+    /// </summary>
+    /// <param name="client">Cliente que solicita el ataque</param>
     [PunRPC] // Pedido de Ataque
     private void RequestAttack(Player client)
     {
@@ -104,12 +133,30 @@ public class ServerManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region OTHER_FUNCTIONS
-    [PunRPC]
+    /*[PunRPC]
     public void RequestNickNameUpdate()
     {
         foreach (var client in _playersDic)
         {
             //client.Value.UpdateName(client.Key.NickName);
+        }
+    }*/
+
+    private void UpdatePlayersPositions()
+    {
+        foreach (Player player in _charactersDic.Values)
+        {
+            _posDic[_playersDic[player].PlayerRepresentation] = _playersDic[player].transform.position;
+            _playersDic[player].photonView.RPC("Move", RpcTarget.All, _playersDic[player].PlayerRepresentation, _posDic[_playersDic[player].PlayerRepresentation]);
+        }
+    }
+
+    private void UpdatePlayersRotation()
+    {
+        foreach (Player player in _charactersDic.Values)
+        {
+            _posDic[_playersDic[player].PlayerRepresentation] = _playersDic[player].transform.rotation.eulerAngles;
+            _playersDic[player].photonView.RPC("Rotate", RpcTarget.All, _playersDic[player].PlayerRepresentation, _posDic[_playersDic[player].PlayerRepresentation]);
         }
     }
 
@@ -128,9 +175,4 @@ public class ServerManager : MonoBehaviourPunCallbacks
     }
 
     #endregion
-
-    public override void OnMasterClientSwitched(Player newMasterClient)
-    {
-        
-    }
 }
