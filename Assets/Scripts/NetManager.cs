@@ -2,25 +2,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 public class NetManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Button playButton;
-    [SerializeField] private InputField playerName;
-    [SerializeField] private InputField roomName;
+    [SerializeField] private TMP_InputField playerName;
+    [SerializeField] private TMP_InputField roomName;
+    [SerializeField] private TextMeshProUGUI statusText;
     private void Start()
     {
         playButton.interactable = false;
         PhotonNetwork.ConnectUsingSettings();
+        statusText.text = "<color=orange>Conecting to server...</color>";
     }
     public override void OnConnectedToMaster()
     {
-        BLogger.Print(MType.P, "Connected To Master");
+        statusText.text = "<color=green>Conected to Photon</color>";
         PhotonNetwork.JoinLobby();
     }
     public override void OnJoinedLobby()
     {
+        statusText.text = "<color=green>Conected to Server</color>";
         playButton.interactable = true;
-        BLogger.Print(MType.P, "Connected To Lobby");
     }
 
     ///<summary>
@@ -43,18 +46,19 @@ public class NetManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        BLogger.Print(MType.P, "Join Room Success!");
+        statusText.text = $"<color=green>Joined to {PhotonNetwork.CurrentRoom.Name} room</color>";
         PhotonNetwork.LoadLevel("Gameplay");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        statusText.text = $"<color=red>Unable to join on {PhotonNetwork.CurrentRoom.Name} room</color>";
         playButton.interactable = true;
-        BLogger.Print(MType.N, "Join Room Failed :(");
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
+        statusText.text = $"<color=red>Unable to create {PhotonNetwork.CurrentRoom.Name} room</color>";
         playButton.interactable = true;
     }
 }
