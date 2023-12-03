@@ -2,7 +2,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController : MonoBehaviourPun
+public class PlayerController : MonoBehaviourPun //DEPRECADO
 {
     [SerializeField] Transform _markedPoint;
     [SerializeField] PlayerModel _playerModel;
