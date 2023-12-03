@@ -14,6 +14,14 @@ public class MagicBall : MonoBehaviourPun
 
     public string duenio;
 
+    private void Awake()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        { 
+            Destroy(this);
+        }
+    }
+
     void Update()
     {
         counter += Time.deltaTime;
