@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System.Collections;
 
 public class ServerManager : MonoBehaviourPunCallbacks
 {
@@ -28,6 +29,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     public Player GetServer => _server;
     public bool IsServer => PhotonNetwork.IsMasterClient;
     public bool IsGameStarted => _isGameStarted;
+    public bool IsGameEnded => _isGameEnded;
     #endregion
 
     #region UNITY_EVENTS
@@ -35,6 +37,12 @@ public class ServerManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         _server = PhotonNetwork.MasterClient;
+    }
+
+    private void Start()
+    {
+        _isGameStarted = false;
+        _isGameEnded = false;
     }
     #endregion
 
@@ -67,6 +75,14 @@ public class ServerManager : MonoBehaviourPunCallbacks
             _charactersDic[character] = client;
             _playerCount++;
         }
+
+        if (_playerCount == 2)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StartCounter(); 
+            }
+        }
     }
 
     /// <summary>
@@ -87,7 +103,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region REQUESTS
-    
+
     [PunRPC]
     /// <summary>
     /// Pedido para instanciar el jugador y guardar su referencia.
@@ -110,7 +126,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
         _playersDic[client].transform.position += movement;
         UpdatePlayersPositions();
     }
-    
+
     [PunRPC]
     /// <summary>
     /// Pedido de rotación del personaje
@@ -137,7 +153,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
         temp._server = this;
         temp.photonView.RPC("SetOwner", client, client);
     }
-    
+
     [PunRPC]
     /// <summary>
     /// Pedido de daño para el jugador
@@ -205,6 +221,25 @@ public class ServerManager : MonoBehaviourPunCallbacks
 
     void StartGame()
     {
+        _isGameStarted = true;
+    }
+
+    void StartCounter()
+    {
+        StartCoroutine(BeginPlayCounter());
+    }
+
+    IEnumerator BeginPlayCounter()
+    {
+        _uiManager.photonView.RPC("ChangeMessage", RpcTarget.All, "3");
+        yield return new WaitForSeconds(1f);
+        _uiManager.photonView.RPC("ChangeMessage", RpcTarget.All, "2");
+        yield return new WaitForSeconds(1f);
+        _uiManager.photonView.RPC("ChangeMessage", RpcTarget.All, "1");
+        yield return new WaitForSeconds(1f);
+        _uiManager.photonView.RPC("ChangeMessage", RpcTarget.All, "Fight!");
+        yield return new WaitForSeconds(1f);
+        _uiManager.photonView.RPC("DeactivateMainTitle", RpcTarget.All);
         _isGameStarted = true;
     }
     #endregion
