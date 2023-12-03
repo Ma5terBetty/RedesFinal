@@ -151,7 +151,6 @@ public class ServerManager : MonoBehaviourPunCallbacks
         var magicBall = PhotonNetwork.Instantiate(_magicBallName, playerTransform.position + compensation, playerTransform.localRotation);
         var temp = magicBall.GetComponent<MagicBall>();
         temp._server = this;
-        temp.photonView.RPC("SetOwner", client, client);
     }
 
     [PunRPC]
@@ -186,6 +185,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     private void DestroyPlayer(Player client)
     {
         PhotonNetwork.Destroy(_playersDic[client].gameObject);
+        _playerCount--;
     }
 
     [PunRPC]

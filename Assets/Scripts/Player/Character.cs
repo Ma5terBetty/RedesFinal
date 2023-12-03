@@ -87,13 +87,12 @@ public class Character : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
-        var ball = other.gameObject.GetComponent<MagicBall>();
+        if (!PhotonNetwork.IsMasterClient) return;
 
+        var ball = other.gameObject.GetComponent<MagicBall>();
         if (ball != null)
         {
-            print("Me toco una bola");
-            //ServerManager.RPC("RequestDamage", PhotonNetwork.LocalPlayer, ball);
-            //PhotonNetwork.Destroy(ball.gameObject);
+            
         }
     }
 }
