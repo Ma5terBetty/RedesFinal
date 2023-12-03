@@ -5,7 +5,6 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviourPun //DEPRECADO
 {
     [SerializeField] Transform _markedPoint;
-    [SerializeField] PlayerModel _playerModel;
     NavMeshAgent selfAgent;
 
     private void Awake()
