@@ -16,6 +16,7 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
     private ChatClient _chatClient;
     private Dictionary<string, int> _chatDic = new Dictionary<string, int>();
     public CharacterControl characterControl;
+    public ServerManager _server;
     private string[] _channels;
     private string[] _chats;
     private int _currentChat;
@@ -68,6 +69,8 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
         }
         else
         {
+            if(!_server.IsGameStarted || _server.IsGameEnded)
+
             switch (input)
             {
                 case "fireball":
