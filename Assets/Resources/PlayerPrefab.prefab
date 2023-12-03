@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: -5917433354058474654}
   - component: {fileID: 5139003220388298296}
   - component: {fileID: 3977941880940501106}
-  - component: {fileID: 1359925722337328924}
   - component: {fileID: 552995880808393734}
   m_Layer: 0
   m_Name: PlayerPrefab
@@ -94,20 +93,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 09a7a955a018b0141828045c9caba4f3, type: 2}
   - {fileID: 2100000, guid: 0f2624f15c0a902488556f34db1881e0, type: 2}
   _skinedMeshRenderer: {fileID: 967859864783347393}
---- !u!114 &1359925722337328924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2255825581166587720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d246e5a665c2b439e3f2e658e59dbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerHealth: 0
-  playerName: 
 --- !u!114 &552995880808393734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,8 +106,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: {fileID: 413659925989904803}
-  _speed: 0.1
-  _turningSpeed: 150
   _health: 100
   ServerManager: {fileID: 0}
   PlayerRepresentation: 

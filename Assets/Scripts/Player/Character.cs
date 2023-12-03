@@ -7,14 +7,14 @@ using System.Collections.Generic;
 public class Character : MonoBehaviourPun
 {
     [SerializeField] private TextMeshPro _playerName;
-    [SerializeField] private float _speed = 5;
-    [SerializeField] private float _turningSpeed = 50;
     [SerializeField] private float _health;
     private Rigidbody _rigidbody;
 
     public ServerManager ServerManager;
     public Player LocalPlayer;
     public string PlayerRepresentation;
+
+    public float Health => _health;
 
     private void Start()
     {
@@ -50,10 +50,16 @@ public class Character : MonoBehaviourPun
         }
     }
 
-    public void GetDamage()
+    [PunRPC]
+    public void GetDamage(float health)
     {
-        _health -= 25;
-        Debug.Log("He recibido daño");
+        _health = health;
+    }
+
+    [PunRPC]
+    public void GetHealing(float health)
+    {
+        _health = health;
     }
 
     public void ChangeName(Player client)
@@ -86,8 +92,8 @@ public class Character : MonoBehaviourPun
         if (ball != null)
         {
             print("Me toco una bola");
-            ServerManager.RPC("RequestDamage", PhotonNetwork.LocalPlayer, ball);
-            PhotonNetwork.Destroy(ball.gameObject);
+            //ServerManager.RPC("RequestDamage", PhotonNetwork.LocalPlayer, ball);
+            //PhotonNetwork.Destroy(ball.gameObject);
         }
     }
 }

@@ -41,6 +41,11 @@ MonoBehaviour:
   - RequestNickNameUpdate
   - RequestRotation
   - UpdateName
+  - Move
+  - Rotate
+  - RequestDamage
+  - Destroy
+  - UpdateHealth
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
