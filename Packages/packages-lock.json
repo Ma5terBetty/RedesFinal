@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.exit-games.photon": {
+      "version": "https://github.com/camnewnham/PhotonPackage.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "bb3c2bf2d76a91ac1d0a31bccb20075314927765"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

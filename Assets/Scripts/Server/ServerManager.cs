@@ -128,4 +128,9 @@ public class ServerManager : MonoBehaviourPunCallbacks
     }
 
     #endregion
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        
+    }
 }
