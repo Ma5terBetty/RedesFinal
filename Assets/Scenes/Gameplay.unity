@@ -320,7 +320,7 @@ MonoBehaviour:
   - {fileID: 902124231}
   - {fileID: 310170421}
   - {fileID: 1374772291}
-  _uiManager: {fileID: 0}
+  _uiManager: {fileID: 929651947}
 --- !u!4 &45433365
 Transform:
   m_ObjectHideFlags: 0

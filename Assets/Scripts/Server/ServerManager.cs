@@ -68,6 +68,11 @@ public class ServerManager : MonoBehaviourPunCallbacks
             _playerCount++;
         }
     }
+
+    /// <summary>
+    /// De desconectó un jugador de la Sala.
+    /// </summary>
+    /// <param name="otherPlayer">Cliente desconectado de la sala</param>
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         if (IsServer)
