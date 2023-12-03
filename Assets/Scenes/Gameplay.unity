@@ -1182,6 +1182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   content: {fileID: 998507520}
   inputField: {fileID: 59495164}
+  characterControl: {fileID: 1877797532}
 --- !u!1 &468093596
 GameObject:
   m_ObjectHideFlags: 0
