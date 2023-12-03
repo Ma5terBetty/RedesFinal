@@ -9,31 +9,17 @@ public class MagicBall : MonoBehaviourPun
     public Player _owner;
 
     public Player Owner => _owner;
-
-    private void Start()
-    {
-        
-    }
-
-    void SetMagicBall()
-    { 
-    
-    }
+    public float lifeSpawn = 5f;
+    public float counter = 0;
 
     void Update()
     {
-        transform.position += transform.forward * Time.deltaTime * _speed;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        var otherClient = other.GetComponent<Character>();
-
-        if (otherClient == null) return;
-
-        if (otherClient != _server.PlayersDic[_owner])
+        counter += Time.deltaTime;
+        if (counter >= lifeSpawn)
         {
             PhotonNetwork.Destroy(this.gameObject);
         }
+
+        transform.position += transform.forward * Time.deltaTime * _speed;
     }
 }

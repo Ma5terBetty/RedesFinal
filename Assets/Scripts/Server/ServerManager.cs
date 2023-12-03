@@ -32,18 +32,24 @@ public class ServerManager : MonoBehaviourPunCallbacks
     {
         _server = PhotonNetwork.MasterClient;
     }
-    private void Start()
-    {
-        PrintPlayers();
-        _isGameStarted = true;
-    }
     #endregion
 
     #region PHOTON_RELATED
+
+    /// <summary>
+    /// Llamada simplificada a los RPC's del servidor.
+    /// </summary>
+    /// <param name="name">Nombre de la función a reproducir</param>
+    /// <param name="input">Parámetros a utilizar</param>
     public void RPC(string name, params object[] input)
     {
         photonView.RPC(name, _server, input);
     }
+
+    /// <summary>
+    /// Crea y guarda la referencia del jugador.
+    /// </summary>
+    /// <param name="client">Cliente a guardar</param>
     private void CreatePlayer(Player client)
     {
         var obj = PhotonNetwork.Instantiate(_playerPrefabName, _spawnPoints[_playersDic.Count].position, Quaternion.identity);
@@ -72,47 +78,47 @@ public class ServerManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region REQUESTS
-
+    
+    [PunRPC]
     /// <summary>
     /// Pedido para instanciar el jugador y guardar su referencia.
     /// </summary>
     /// <param name="player">Cliente a instanciar</param>
-    [PunRPC]
     private void RequestConnect(Player player)
     {
         CreatePlayer(player);
         print($"{player.NickName}");
     }
 
+    [PunRPC]
     /// <summary>
     /// Pedido de movimiento dentro del mundo
     /// </summary>
     /// <param name="client">Cliente a mover</param>
     /// <param name="movement">Dirección de movimiento</param>
-    [PunRPC] // Pedido de Movimiento
     private void RequestMove(Player client, Vector3 movement)
     {
         _playersDic[client].transform.position += movement;
         UpdatePlayersPositions();
     }
-
+    
+    [PunRPC]
     /// <summary>
     /// Pedido de rotación del personaje
     /// </summary>
     /// <param name="client">Cliente a rotar</param>
     /// <param name="degrees">Cantidad de grados a rotar</param>
-    [PunRPC] // Pedido de Rotación
     private void RequestRotation(Player client, float degrees)
     {
         _playersDic[client].transform.Rotate(Vector3.up, degrees);
         UpdatePlayersRotation();
     }
 
+    [PunRPC]
     /// <summary>
     /// Pedido de ataque para instanciar una bola
     /// </summary>
     /// <param name="client">Cliente que solicita el ataque</param>
-    [PunRPC] // Pedido de Ataque
     private void RequestAttack(Player client)
     {
         var playerTransform = _playersDic[client].transform;
@@ -123,25 +129,28 @@ public class ServerManager : MonoBehaviourPunCallbacks
         temp._server = this;
     }
 
-    private void RequestDamage(Player client, MagicBall ball)
+    
+    [PunRPC]
+    /// <summary>
+    /// Pedido de daño para el jugador
+    /// </summary>
+    /// <param name="client">Cliente que solicita el daño</param>
+    private void RequestDamage(Player client)
     {
-        if (ball.Owner != client)
-        {
-            _playersDic[client].GetDamage();
-        }
+        _playersDic[client].GetDamage();
+    }
+
+    [PunRPC]
+    private void Destroy(Player client)
+    {
+        _playersDic[client].GetDamage();
     }
     #endregion
 
     #region OTHER_FUNCTIONS
-    /*[PunRPC]
-    public void RequestNickNameUpdate()
-    {
-        foreach (var client in _playersDic)
-        {
-            //client.Value.UpdateName(client.Key.NickName);
-        }
-    }*/
-
+    /// <summary>
+    /// Refresca la posición de los jugadores en la escena
+    /// </summary>
     private void UpdatePlayersPositions()
     {
         foreach (Player player in _charactersDic.Values)
@@ -150,7 +159,9 @@ public class ServerManager : MonoBehaviourPunCallbacks
             _playersDic[player].photonView.RPC("Move", RpcTarget.All, _playersDic[player].PlayerRepresentation, _posDic[_playersDic[player].PlayerRepresentation]);
         }
     }
-
+    /// <summary>
+    /// Refresca la rotación de los jugadores en escena
+    /// </summary>
     private void UpdatePlayersRotation()
     {
         foreach (Player player in _charactersDic.Values)
@@ -160,19 +171,9 @@ public class ServerManager : MonoBehaviourPunCallbacks
         }
     }
 
-    //DEBUG
-    void PrintPlayers()
-    {
-        foreach (var client in _playersDic)
-        {
-            print($"{client.Key.NickName}");
-        }
-    }
-
     void StartGame()
-    { 
+    {
         _isGameStarted = true;
     }
-
     #endregion
 }
