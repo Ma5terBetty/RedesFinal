@@ -52,6 +52,9 @@ MonoBehaviour:
   - SetOwner
   - DestroyPlayer
   - DestroyBall
+  - ActivateMainTitle
+  - UpdateTextStatus
+  - DeactivateMainTitle
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
