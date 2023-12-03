@@ -55,6 +55,7 @@ MonoBehaviour:
   - ActivateMainTitle
   - UpdateTextStatus
   - DeactivateMainTitle
+  - ChangeMessage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
