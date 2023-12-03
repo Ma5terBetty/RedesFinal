@@ -46,6 +46,12 @@ MonoBehaviour:
   - RequestDamage
   - Destroy
   - UpdateHealth
+  - GetDamage
+  - GetHealing
+  - Healing
+  - SetOwner
+  - DestroyPlayer
+  - DestroyBall
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

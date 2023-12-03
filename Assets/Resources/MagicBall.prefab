@@ -115,7 +115,6 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &430965216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,12 +130,12 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
+  observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 2
   ObservedComponents:
   - {fileID: 430965215}
-  sceneViewId: 0
+  viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &8547286704530909813
@@ -153,3 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 10
   _server: {fileID: 0}
+  lifeSpawn: 5
+  counter: 0
+  duenio: 
