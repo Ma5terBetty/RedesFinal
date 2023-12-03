@@ -320,6 +320,7 @@ MonoBehaviour:
   - {fileID: 902124231}
   - {fileID: 310170421}
   - {fileID: 1374772291}
+  _uiManager: {fileID: 0}
 --- !u!4 &45433365
 Transform:
   m_ObjectHideFlags: 0
@@ -2810,6 +2811,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49ad768e24b1b774babe0626488d9903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _server: {fileID: 45433364}
+  _slider: {fileID: 1440038441}
   _mainText: {fileID: 2091537182}
 --- !u!1 &931534632
 GameObject:
