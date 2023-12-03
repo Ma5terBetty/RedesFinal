@@ -71,11 +71,10 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
             switch (input)
             {
                 case "fireball":
-                    //characterControl.Attack();
-                    print(PhotonNetwork.LocalPlayer.NickName + "Ataque!");
+                    characterControl.Attack();
                     break;
 
-                case "mp":
+                case "mu":
                     characterControl.MoveUp();
                     break;
 
@@ -100,7 +99,7 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
                     break;
 
                 case "heal":
-                    print(PhotonNetwork.LocalPlayer.NickName + "Curarse");
+                    characterControl.Heal();
                     break;
             }
         }
