@@ -15,6 +15,7 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
     public TMP_InputField inputField;
     private ChatClient _chatClient;
     private Dictionary<string, int> _chatDic = new Dictionary<string, int>();
+    public CharacterControl characterControl;
     private string[] _channels;
     private string[] _chats;
     private int _currentChat;
@@ -52,8 +53,57 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
     public void SendMessageToChat()
     {
         if (string.IsNullOrEmpty(inputField.text) || string.IsNullOrWhiteSpace(inputField.text)) return;
+        CheckTextForCommand(inputField.text);
         _chatClient.PublishMessage(_channels[_currentChat], inputField.text);
         inputField.text = "";
+    }
+
+    public void CheckTextForCommand(string input)
+    {
+        input.ToLower();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            //Comandos Server
+        }
+        else
+        {
+            switch (input)
+            {
+                case "fireball":
+                    //characterControl.Attack();
+                    print(PhotonNetwork.LocalPlayer.NickName + "Ataque!");
+                    break;
+
+                case "mp":
+                    characterControl.MoveUp();
+                    break;
+
+                case "md":
+                    characterControl.MoveDown();
+                    break;
+
+                case "ml":
+                    characterControl.MoveLeft();
+                    break;
+
+                case "mr":
+                    characterControl.MoveRight();
+                    break;
+
+                case "rl":
+                    characterControl.RotateLeft();
+                    break;
+
+                case "rr":
+                    characterControl.RotateRight();
+                    break;
+
+                case "heal":
+                    print(PhotonNetwork.LocalPlayer.NickName + "Curarse");
+                    break;
+            }
+        }
     }
     #endregion
 
