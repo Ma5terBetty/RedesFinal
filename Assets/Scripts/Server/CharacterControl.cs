@@ -33,7 +33,7 @@ public class CharacterControl : MonoBehaviourPunCallbacks
     {
         if (!_server.IsGameStarted) return;
 
-        if (Input.GetKeyDown(KeyCode.Space)) _server.RPC("RequestAttack", _localClient);
+        //if (Input.GetKeyDown(KeyCode.Space)) _server.RPC("RequestAttack", _localClient);
 
         if (LeftKey && RightKey) return;
 
@@ -51,12 +51,47 @@ public class CharacterControl : MonoBehaviourPunCallbacks
         if (WKey) direction += new Vector3(0, 0, 1);
         if (SKey) direction += new Vector3(0, 0, -1);
 
-        _server.RPC("RequestMove", _localClient, direction);
+        //_server.RPC("RequestMove", _localClient, direction);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("MainMenu");
+    }
+
+    public void Attack()
+    { 
+        
+    }
+
+    public void MoveUp()
+    {
+        _server.RPC("RequestMove", _localClient, new Vector3(0, 0, 0.5f));
+    }
+
+    public void MoveDown()
+    {
+        _server.RPC("RequestMove", _localClient, new Vector3(0, 0, -0.5f));
+    }
+
+    public void MoveLeft()
+    {
+        _server.RPC("RequestMove", _localClient, new Vector3(-0.5f, 0, 0));
+    }
+
+    public void MoveRight()
+    {
+        _server.RPC("RequestMove", _localClient, new Vector3(0.5f, 0, 0));
+    }
+
+    public void RotateLeft()
+    {
+        _server.RPC("RequestRotation", _localClient, -45f);
+    }
+
+    public void RotateRight()
+    {
+        _server.RPC("RequestRotation", _localClient, 45f);
     }
 }
