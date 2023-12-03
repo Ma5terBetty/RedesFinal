@@ -47,7 +47,6 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
     void UpdateChatUI()
     {
         content.text = _chats[_currentChat];
-        print("Chat Update");
         inputField.ActivateInputField();
     }
 
@@ -122,7 +121,6 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
     public void OnConnected()
     {
         _chatClient.Subscribe(_channels);
-        print("Client Connected to Photon");
     }
 
     public void OnDisconnected()
@@ -137,7 +135,6 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
             _chats[indexChat] += senders[i] + ":" + messages[i] + "\n";
         }
         UpdateChatUI();
-        print("Get Message");
     }
 
     public void OnPrivateMessage(string sender, object message, string channelName)
@@ -156,7 +153,6 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
             _chats[0] += "<color=blue>" + "Suscribed to channel: " + channels[i] + "</color>" + "\n";
         }
         UpdateChatUI();
-        print("Suscribed to Channel");
     }
 
     public void OnUnsubscribed(string[] channels)
@@ -166,12 +162,17 @@ public class ChatManager : MonoBehaviourPunCallbacks, IChatClientListener
 
     public void OnUserSubscribed(string channel, string user)
     {
-        print("User Suscribed");
     }
 
     public void OnUserUnsubscribed(string channel, string user)
     {
 
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        _chats[0] += "<color=blue>" + $"{otherPlayer.NickName} " + "</color>" + "Left the room" +"\n";
+        UpdateChatUI();
     }
     #endregion
 }
