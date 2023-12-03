@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviourPun
     [SerializeField] private TextMeshProUGUI _mainText;
     [SerializeField] private Image _titleBackground;
     [SerializeField] private TextMeshProUGUI _roomName;
+    [SerializeField] private GameObject _pauseMenu;
 
     private void Awake()
     {
@@ -31,6 +32,15 @@ public class UIManager : MonoBehaviourPun
         _slider.maxValue = 100;
         _slider.value = 100;
         _roomName.text = $"Room: {PhotonNetwork.CurrentRoom.Name}";
+        _pauseMenu.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        { 
+            PauseMenu();
+        }
     }
 
     [PunRPC]
@@ -63,5 +73,16 @@ public class UIManager : MonoBehaviourPun
     {
         _titleBackground.gameObject.SetActive(false);
         _mainText.gameObject.SetActive(false);
+    }
+
+    public void PauseMenu()
+    {
+        _pauseMenu.SetActive(!_pauseMenu.activeSelf);
+    }
+
+    public void LoadMainMenu()
+    { 
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel("MainMenu");
     }
 }
