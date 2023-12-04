@@ -2992,7 +2992,7 @@ MonoBehaviour:
   primaryRecorder: {fileID: 1886365591}
   globalRecordersLogLevel: 3
   globalSpeakersLogLevel: 3
-  globalPlaybackDelay: 200
+  globalPlaybackDelay: 50
   Settings:
     AppIdRealtime: 
     AppIdChat: 

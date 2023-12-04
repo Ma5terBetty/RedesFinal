@@ -3,6 +3,9 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Photon.Voice.PUN;
+using Photon.Voice.Unity;
 
 public class Character : MonoBehaviourPun
 {
@@ -83,6 +86,15 @@ public class Character : MonoBehaviourPun
             print("Me toco una bola");
             _Server.RPC("RequestDamage", ball);
         }
+    }
+
+    [PunRPC]
+    private void StartVoice()
+    {
+        var audioView = photonView.AddComponent<PhotonVoiceView>();
+        var speaker = photonView.AddComponent<Speaker>();
+
+        audioView.UsePrimaryRecorder = true;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -4,6 +4,8 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using Unity.VisualScripting;
+using Photon.Voice.PUN;
 
 public class ServerManager : MonoBehaviourPunCallbacks
 {
@@ -70,6 +72,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
         character.ChangeName(client);
         character._Server = this;
         character.LocalPlayer = client;
+        character.photonView.RPC("StartVoice", RpcTarget.AllBuffered);
         if (character != null)
         {
             _playersDic[client] = character;
