@@ -10,7 +10,7 @@ public class Character : MonoBehaviourPun
     [SerializeField] private float _health;
     private Rigidbody _rigidbody;
 
-    public ServerManager ServerManager;
+    public ServerManager _Server;
     public Player LocalPlayer;
     public string PlayerRepresentation;
 
@@ -81,7 +81,7 @@ public class Character : MonoBehaviourPun
         if (ball != null)
         {
             print("Me toco una bola");
-            ServerManager.RPC("RequestDamage", ball);
+            _Server.RPC("RequestDamage", ball);
         }
     }
 
