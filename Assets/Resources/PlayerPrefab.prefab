@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerName: {fileID: 413659925989904803}
   _health: 100
-  ServerManager: {fileID: 0}
+  _Server: {fileID: 0}
   PlayerRepresentation: 
 --- !u!1 &5977392159549168101
 GameObject:
