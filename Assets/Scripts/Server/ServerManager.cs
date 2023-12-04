@@ -80,7 +80,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
             _playerCount++;
         }
 
-        if (_playerCount == 4)
+        if (_playerCount == 2)
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -128,6 +128,10 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// <param name="movement">Dirección de movimiento</param>
     private void RequestMove(Player client, Vector3 movement)
     {
+        if (!_isGameStarted) return;
+
+        _playersDic[client]._anim.SetBool("Attack", false);
+        _playersDic[client]._anim.SetBool("Move", true);
         _playersDic[client].transform.position += movement;
         UpdatePlayersPositions();
     }
@@ -140,6 +144,8 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// <param name="degrees">Cantidad de grados a rotar</param>
     private void RequestRotation(Player client, float degrees)
     {
+        if (!_isGameStarted) return;
+
         _playersDic[client].transform.Rotate(Vector3.up, degrees);
         UpdatePlayersRotation();
     }
@@ -151,6 +157,11 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// <param name="client">Cliente que solicita el ataque</param>
     private void RequestAttack(Player client)
     {
+        if (!_isGameStarted) return;
+
+        _playersDic[client]._anim.SetBool("Move", false);
+        _playersDic[client]._anim.SetBool("Attack", true);
+        
         var playerTransform = _playersDic[client].transform;
         Vector3 compensation = new Vector3(0, 1, 0);
         var magicBall = PhotonNetwork.Instantiate(_magicBallName, playerTransform.position + compensation, playerTransform.localRotation);
@@ -166,7 +177,8 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// <param name="client">Cliente que solicita el daño</param>
     private void RequestDamage(Character client)
     {
-        print("REQUEST DAMAGE");
+        if (!_isGameStarted) return;
+
         _playersDic[_charactersDic[client]].Health -= 25f;
         if (_playersDic[_charactersDic[client]].Health <= 0)
         {
@@ -187,6 +199,8 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// <param name="client">Cliente que solicita la salud</param>
     private void Healing(Player client)
     {
+        if (!_isGameStarted) return;
+
         _playersDic[client].Health += 10f;
         if (_playersDic[client].Health >= 100)
         {

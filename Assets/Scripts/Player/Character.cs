@@ -15,6 +15,7 @@ public class Character : MonoBehaviourPun
     public ServerManager _Server;
     public Player LocalPlayer;
     public string PlayerRepresentation;
+    public Animator _anim;
 
     public float Health;
 
@@ -26,6 +27,7 @@ public class Character : MonoBehaviourPun
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _anim = GetComponent<Animator>();
     }
 
 
