@@ -80,7 +80,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
             _playerCount++;
         }
 
-        if (_playerCount == 2)
+        if (_playerCount == 4)
         {
             if (PhotonNetwork.IsMasterClient)
             {
