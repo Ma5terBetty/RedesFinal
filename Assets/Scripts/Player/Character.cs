@@ -10,19 +10,18 @@ using Photon.Voice.Unity;
 public class Character : MonoBehaviourPun
 {
     [SerializeField] private TextMeshPro _playerName;
-    [SerializeField] private float _health;
     private Rigidbody _rigidbody;
 
     public ServerManager _Server;
     public Player LocalPlayer;
     public string PlayerRepresentation;
 
-    public float Health => _health;
+    public float Health;
 
     private void Start()
     {
         LocalPlayer = PhotonNetwork.LocalPlayer;
-        _health = 100;
+        Health = 100;
     }
     private void Awake()
     {
@@ -56,13 +55,17 @@ public class Character : MonoBehaviourPun
     [PunRPC]
     public void GetDamage(float health)
     {
-        _health = health;
+        Health = health;
+        if (Health <= 0)
+        {
+            _Server.RPC("DestroyPlayer", this);
+        }
     }
 
     [PunRPC]
     public void GetHealing(float health)
     {
-        _health = health;
+        Health = health;
     }
 
     public void ChangeName(Player client)
@@ -75,17 +78,6 @@ public class Character : MonoBehaviourPun
     {
         _playerName.text = name;
         PlayerRepresentation = name;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        var ball = collision.gameObject.GetComponent<MagicBall>();
-
-        if (ball != null)
-        {
-            print("Me toco una bola");
-            _Server.RPC("RequestDamage", ball);
-        }
     }
 
     [PunRPC]
@@ -104,7 +96,14 @@ public class Character : MonoBehaviourPun
         var ball = other.gameObject.GetComponent<MagicBall>();
         if (ball != null)
         {
-            
+            if (ball.Owner.NickName != PlayerRepresentation)
+            {
+                _Server.RPC("RequestDamage", this);
+            }
+            else
+            {
+                //PhotonNetwork.Destroy(other.gameObject);
+            }
         }
     }
 }

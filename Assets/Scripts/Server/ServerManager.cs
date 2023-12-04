@@ -80,7 +80,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
             _playerCount++;
         }
 
-        if (_playerCount == 2)
+        if (_playerCount == 4)
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -156,6 +156,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
         var magicBall = PhotonNetwork.Instantiate(_magicBallName, playerTransform.position + compensation, playerTransform.localRotation);
         var temp = magicBall.GetComponent<MagicBall>();
         temp._server = this;
+        temp.photonView.RPC("SetOwner", RpcTarget.All, client);
     }
 
     [PunRPC]
@@ -163,13 +164,20 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// Pedido de daño para el jugador
     /// </summary>
     /// <param name="client">Cliente que solicita el daño</param>
-    private void RequestDamage(Player client)
+    private void RequestDamage(Character client)
     {
-        Character temp = _playersDic[client];
-        float hp = temp.Health - 25f;
-        if (hp <= 0) hp = 0;
-        temp.photonView.RPC("GetDamage", client, hp);
-        _uiManager.photonView.RPC("UpdateHealth", client, hp);
+        print("REQUEST DAMAGE");
+        _playersDic[_charactersDic[client]].Health -= 25f;
+        if (_playersDic[_charactersDic[client]].Health <= 0)
+        {
+            _uiManager.photonView.RPC("UpdateHealth", _charactersDic[client], _playersDic[_charactersDic[client]].Health);
+            DestroyPlayer(client);
+        }
+        else
+        {
+            _playersDic[_charactersDic[client]].photonView.RPC("GetDamage", _charactersDic[client], _playersDic[_charactersDic[client]].Health);
+            _uiManager.photonView.RPC("UpdateHealth", _charactersDic[client], _playersDic[_charactersDic[client]].Health);
+        }
     }
 
     [PunRPC]
@@ -179,17 +187,22 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// <param name="client">Cliente que solicita la salud</param>
     private void Healing(Player client)
     {
-        Character temp = _playersDic[client];
-        float hp = temp.Health + 10f;
-        if (hp >= 100) hp = 100;
-        temp.photonView.RPC("GetHealing", client, hp);
-        _uiManager.photonView.RPC("UpdateHealth", client, hp);
+        _playersDic[client].Health += 10f;
+        if (_playersDic[client].Health >= 100)
+        {
+            _playersDic[client].Health = 100;
+        }
+        else
+        {
+            _playersDic[client].photonView.RPC("GetDamage", client, _playersDic[client].Health);
+            _uiManager.photonView.RPC("UpdateHealth", client, _playersDic[client].Health);
+        }
     }
 
     [PunRPC]
-    private void DestroyPlayer(Player client)
+    private void DestroyPlayer(Character client)
     {
-        PhotonNetwork.Destroy(_playersDic[client].gameObject);
+        PhotonNetwork.Destroy(_playersDic[_charactersDic[client]].gameObject);
         _playerCount--;
         CheckForVictory();
     }
