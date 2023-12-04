@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using Unity.VisualScripting;
 
 public class MagicBall : MonoBehaviourPun
 {
@@ -14,22 +15,30 @@ public class MagicBall : MonoBehaviourPun
 
     public string duenio;
 
-    private void Awake()
-    {
-        if (!PhotonNetwork.IsMasterClient)
-        { 
-            Destroy(this);
-        }
-    }
-
     void Update()
     {
         counter += Time.deltaTime;
         if (counter >= lifeSpawn)
         {
-            _server.RPC("DestroyBall", _owner, this.gameObject);
+            PhotonNetwork.Destroy(this.gameObject);
         }
 
         transform.position += transform.forward * Time.deltaTime * _speed;
+    }
+
+    [PunRPC]
+    void SetOwner(Player player)
+    { 
+        _owner = player;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        if (other.GetComponent<Character>() == null )
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
     }
 }
