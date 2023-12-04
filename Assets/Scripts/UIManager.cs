@@ -9,11 +9,13 @@ public class UIManager : MonoBehaviourPun
     public static UIManager Instance;
 
     [SerializeField] private ServerManager _server;
-    [SerializeField] private Slider _slider;
     [SerializeField] private TextMeshProUGUI _mainText;
-    [SerializeField] private Image _titleBackground;
     [SerializeField] private TextMeshProUGUI _roomName;
+    [SerializeField] private TextMeshProUGUI _winnerText;
     [SerializeField] private GameObject _pauseMenu;
+    [SerializeField] private GameObject _winnerScreen;
+    [SerializeField] private Image _titleBackground;
+    [SerializeField] private Slider _slider;
 
     private void Awake()
     {
@@ -33,6 +35,7 @@ public class UIManager : MonoBehaviourPun
         _slider.value = 100;
         _roomName.text = $"Room: {PhotonNetwork.CurrentRoom.Name}";
         _pauseMenu.SetActive(false);
+        _winnerScreen.SetActive(false);
     }
 
     private void Update()
@@ -73,6 +76,13 @@ public class UIManager : MonoBehaviourPun
     {
         _titleBackground.gameObject.SetActive(false);
         _mainText.gameObject.SetActive(false);
+    }
+
+    [PunRPC]
+    private void WinnerScreen(string winner)
+    {
+        _winnerScreen.gameObject.SetActive(true);
+        _winnerText.text = $"The Wizard {winner} has won!";
     }
 
     public void PauseMenu()

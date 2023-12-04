@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 public class ServerManager : MonoBehaviourPunCallbacks
 {
@@ -67,7 +68,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
         var obj = PhotonNetwork.Instantiate(_playerPrefabName, _spawnPoints[_playersDic.Count].position, Quaternion.identity);
         var character = obj.GetComponent<Character>();
         character.ChangeName(client);
-        character.ServerManager = this;
+        character._Server = this;
         character.LocalPlayer = client;
         if (character != null)
         {
@@ -97,6 +98,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.Destroy(_playersDic[otherPlayer].gameObject);
                 _playerCount--;
+                CheckForVictory();
             }
         }
     }
@@ -186,6 +188,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.Destroy(_playersDic[client].gameObject);
         _playerCount--;
+        CheckForVictory();
     }
 
     [PunRPC]
@@ -222,6 +225,15 @@ public class ServerManager : MonoBehaviourPunCallbacks
     void StartGame()
     {
         _isGameStarted = true;
+    }
+
+    void CheckForVictory()
+    {
+        if (_playerCount == 1 && _isGameStarted)
+        { 
+            _isGameEnded = true;
+            _uiManager.photonView.RPC("WinnerScreen", RpcTarget.All, _playersDic.ElementAt(0).Key.NickName);
+        }
     }
 
     void StartCounter()
