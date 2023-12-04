@@ -129,6 +129,8 @@ public class ServerManager : MonoBehaviourPunCallbacks
     private void RequestMove(Player client, Vector3 movement)
     {
         if (!_isGameStarted) return;
+        if (!_playersDic.ContainsKey(client)) return;
+
 
         _playersDic[client]._anim.SetBool("Attack", false);
         _playersDic[client]._anim.SetBool("Move", true);
@@ -145,6 +147,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     private void RequestRotation(Player client, float degrees)
     {
         if (!_isGameStarted) return;
+        if (!_playersDic.ContainsKey(client)) return;
 
         _playersDic[client].transform.Rotate(Vector3.up, degrees);
         UpdatePlayersRotation();
@@ -158,6 +161,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     private void RequestAttack(Player client)
     {
         if (!_isGameStarted) return;
+        if (!_playersDic.ContainsKey(client)) return;
 
         _playersDic[client]._anim.SetBool("Move", false);
         _playersDic[client]._anim.SetBool("Attack", true);
@@ -178,6 +182,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     private void RequestDamage(Character client)
     {
         if (!_isGameStarted) return;
+        if (!_charactersDic.ContainsKey(client)) return;
 
         _playersDic[_charactersDic[client]].Health -= 25f;
         if (_playersDic[_charactersDic[client]].Health <= 0)
@@ -200,6 +205,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     private void Healing(Player client)
     {
         if (!_isGameStarted) return;
+        if (!_playersDic.ContainsKey(client)) return;
 
         _playersDic[client].Health += 10f;
         if (_playersDic[client].Health >= 100)
@@ -216,7 +222,13 @@ public class ServerManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DestroyPlayer(Character client)
     {
-        PhotonNetwork.Destroy(_playersDic[_charactersDic[client]].gameObject);
+        if (!_charactersDic.ContainsKey(client)) return;
+
+        var playerLlamado = _charactersDic[client];
+        var characterLlamado = _playersDic[_charactersDic[client]];
+        _playersDic.Remove(playerLlamado);
+        _charactersDic.Remove(client);
+        PhotonNetwork.Destroy(client.gameObject);
         _playerCount--;
         CheckForVictory();
     }
