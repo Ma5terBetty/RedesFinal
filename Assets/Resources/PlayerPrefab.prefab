@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4119605630560229712}
+  - component: {fileID: 3018236281369106852}
   - component: {fileID: -5917433354058474654}
   - component: {fileID: 5139003220388298296}
   - component: {fileID: 3977941880940501106}
@@ -37,6 +38,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3018236281369106852
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2255825581166587720}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.34565425
+  m_Height: 1.9492574
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.97663975, z: 0}
 --- !u!54 &-5917433354058474654
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -106,9 +121,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: {fileID: 413659925989904803}
-  _health: 100
   _Server: {fileID: 0}
   PlayerRepresentation: 
+  Health: 0
 --- !u!1 &5977392159549168101
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,7 +366,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 136275810615880682, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
 --- !u!4 &902423056806626851 stripped
 Transform:
