@@ -60,6 +60,7 @@ MonoBehaviour:
   - StartVoice
   - PlayerDefeated
   - Deactivate
+  - RequestHealing
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

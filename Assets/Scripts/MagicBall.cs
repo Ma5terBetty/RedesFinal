@@ -17,6 +17,8 @@ public class MagicBall : MonoBehaviourPun
 
     void Update()
     {
+
+        //Hacer solamente con Server
         counter += Time.deltaTime;
         if (counter >= lifeSpawn)
         {

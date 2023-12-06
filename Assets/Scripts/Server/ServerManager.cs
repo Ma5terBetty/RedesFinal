@@ -7,6 +7,9 @@ using System.Linq;
 using Unity.VisualScripting;
 using Photon.Voice.PUN;
 
+
+//Muchos RPC al cohete
+
 public class ServerManager : MonoBehaviourPunCallbacks
 {
     #region PRIVATE_PROPERTIES
@@ -80,7 +83,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
             _playerCount++;
         }
 
-        if (_playerCount == 4)
+        if (_playerCount == 3)
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -202,7 +205,7 @@ public class ServerManager : MonoBehaviourPunCallbacks
     /// Pedido de curación para el jugador
     /// </summary>
     /// <param name="client">Cliente que solicita la salud</param>
-    private void Healing(Player client)
+    private void RequestHealing(Player client)
     {
         if (!_isGameStarted) return;
         if (!_playersDic.ContainsKey(client)) return;
